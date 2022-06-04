@@ -1,15 +1,37 @@
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 export default function SignUpScreen() {
+
+    const [name, setName] = useState('')
+    const [cpf, setCpf] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const navigate =  useNavigate()
+
+    function onSubmit (e){
+        e.preventDefault()
+
+        const data = {
+            name,
+            cpf,
+            email,
+            password
+        }
+
+        console.log(data)
+        navigate('/')
+    }
+
     return(
         <Container>
-            <form onSubmit={(e) => e.preventDefault()}>
-                <input id="name" type="text" placeholder="Nome" />
-                <input id="CPF" type="number" placeholder="CPF"/>
-                <input id="email" type="text" placeholder="E-mail"/>
-                <input id="password" type="password" placeholder="Senha"/>
-                <button type="submit">Cadastrar</button>
+            <form onSubmit={onSubmit}>
+                <input required id="name" type="text" onChange={(e) => setName(e.target.value)} value={name} placeholder="Nome" />
+                <input required id="CPF" type="number" onChange={(e) => setCpf(e.target.value)} value={cpf} placeholder="CPF"/>
+                <input required id="email" type="text" onChange={(e) => setEmail(e.target.value)} value={email} placeholder="E-mail"/>
+                <input required id="password" type="password" onChange={(e) => setPassword(e.target.value)} value={password} placeholder="Senha"/>
+                <button required type="submit">Cadastrar</button>
             </form>
             <Link to="/">
                 <h6>Já possui uma conta? Entre</h6>
@@ -47,6 +69,7 @@ const Container = styled.div`
             background-color: var(--button-color);
             color: #FFF;
             font-weight: 700;
+            cursor: pointer;
         }
     }
 

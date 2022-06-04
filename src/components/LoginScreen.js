@@ -1,21 +1,36 @@
 import styled from 'styled-components'
-import {Link} from "react-router-dom"
-import { useContext } from 'react'
+import {Link, useNavigate} from "react-router-dom"
+import { useState, useContext } from 'react'
 import logoImg from "../assets/Driven_white 1.png"
 import UserContext from '../context/UserContext'
-
-
 
 export default function LoginScreen() {
 
     const {token, setToken} = useContext(UserContext)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const navigate = useNavigate()
+
+
+    function onSubmit (e){
+        e.preventDefault()
+
+        const data = {
+            email,
+            password
+        }
+
+        console.log(data)
+
+        navigate('/subscriptions')
+    }
 
     return (
         <Container>
             <img src={logoImg} alt="Logo" />
-            <form onSubmit={(e) => e.preventDefault()}>
-                <input id="email" type="text" placeholder="E-mail" />
-                <input id="password" type="password" placeholder="Senha" />
+            <form onSubmit={onSubmit}>
+                <input required id="email" type="text" onChange={(e) => setEmail(e.target.value)} value={email} placeholder="E-mail" />
+                <input required id="password" type="password" onChange={(e) => setPassword(e.target.value)} value={password} placeholder="Senha" />
                 <button type="submit">Entrar</button>
             </form>
             <Link to="/sign-up">
@@ -54,6 +69,7 @@ const Container = styled.div`
             background-color: var(--button-color);
             color: #FFF;
             font-weight: 700;
+            cursor: pointer;
         }
     }
 

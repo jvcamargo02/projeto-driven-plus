@@ -5,6 +5,7 @@ import GlobalStyle from '../style/globalStyle'
 import LoginScreen from './LoginScreen'
 import SignUpScreen from './SignUpScreen'
 import SubscriptionScreen from './SubscriptionScreen'
+import ChoiseDetails from './ChoiseDetails'
 
 
 
@@ -22,8 +23,9 @@ export default function App() {
                         <Route path='/' element={<LoginScreen />} />
                         <Route path='/sign-up' element={<SignUpScreen />} />
                         <Route path='/subscriptions' element={<SubscriptionScreen />} />
-                        <Route path='/subscriptions:ID_PLANO' element={<ChoiseDetails />} />
-                    </Routes>
+                        <Route path='/subscriptions/:ID_PLANO' element={<ChoiseDetails />} />
+                        <Route path='/subscriptions/:ID_PLANO' element={<HomeScreen />} />
+                        </Routes>
                 </UserContext.Provider>
             </BrowserRouter>
 

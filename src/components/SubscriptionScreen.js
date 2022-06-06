@@ -12,12 +12,12 @@ export default function SubscriptionScreen() {
             "price": "39.99"
         },
         {
-            "id": 1,
+            "id": 2,
             "image": "https://svgshare.com/i/dSP.svg",
             "price": "39.99"
         },
         {
-            "id": 1,
+            "id": 3,
             "image": "https://svgshare.com/i/dSP.svg",
             "price": "39.99"
         }

@@ -30,7 +30,7 @@ export default function HomeScreen (){
 
     return(
         <Container>
-            <ion-icon onClick={() => console.log(userData)} name="person-circle"></ion-icon>
+            <ion-icon onClick={() => navigate(`/users/${userData.id}`)} name="person-circle"></ion-icon>
             <img src={userData.membership.image}/>
             <h1> Olá, {userData.name}</h1>
             {userData.membership.perks.map((perk, index) => 

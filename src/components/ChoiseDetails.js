@@ -30,9 +30,7 @@ export default function ChoiseDetails() {
         promisse.then((response) => setOption(response.data))
     }, [])
 
-    function goBack() {
-        navigate(-1)
-    }
+    
 
     function onSubmit(e) {
         e.preventDefault()
@@ -46,9 +44,9 @@ export default function ChoiseDetails() {
         navigate('/home')
     }
 
-    function err (){
-        window.alert("Ops! Confira se os dados do seu cartão estão corretos e tente novamente.")
-    }
+    const err = () => window.alert("Ops! Confira se os dados do seu cartão estão corretos e tente novamente.")
+    
+    const goBack = () => navigate(-1)
 
     function sendData() {
 

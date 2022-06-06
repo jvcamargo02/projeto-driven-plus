@@ -1,42 +1,46 @@
 import styled from 'styled-components'
-import {useNavigate} from 'react-router-dom'
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useState, useEffect, useContext } from 'react'
+import UserContext from '../context/UserContext'
+
 
 
 export default function SubscriptionScreen() {
 
-    const [options, setOptions] = useState([
-        {
-            "id": 1,
-            "image": "https://svgshare.com/i/dSP.svg",
-            "price": "39.99"
-        },
-        {
-            "id": 2,
-            "image": "https://svgshare.com/i/dSP.svg",
-            "price": "39.99"
-        },
-        {
-            "id": 3,
-            "image": "https://svgshare.com/i/dSP.svg",
-            "price": "39.99"
-        }
-    ])
+    const {token} = useContext(UserContext) 
+    const [options, setOptions] = useState([])
     const navigate = useNavigate()
 
-    function OpenChoise (id){
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+
+    useEffect(() => {
+
+        const promisse = axios.get("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions/memberships", config)
+        promisse.then((response) => setOptions(response.data))
+    }, [])
+
+    function OpenChoise(id) {
         navigate(`/subscriptions/${id}`)
     }
 
     return (
         <Container>
             <h1>Escolha seu plano</h1>
-            {options.map((option, index) =>
-                <OptionBox key={index} onClick={() => OpenChoise(option.id)}>
-                <img src={option.image} alt={`Plano ${option.id}`}/>
-                <span>{option.price}</span>
-                </OptionBox>
-            )}
+            {options.length !== 0 ?
+
+                options.map((option, index) =>
+                    <OptionBox key={index} onClick={() => OpenChoise(option.id)}>
+                        <img src={option.image} alt={`Plano ${option.id}`} />
+                        <span>{option.price}</span>
+                    </OptionBox>
+                ) : 
+                
+                <p>Carregando...</p>}
 
         </Container>
     )

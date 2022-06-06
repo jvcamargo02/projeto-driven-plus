@@ -1,50 +1,34 @@
 import { useNavigate, useParams } from "react-router-dom"
 import styled from 'styled-components'
-import { useState, useContext } from 'react'
+import axios from "axios"
+import { useState, useContext, useEffect } from 'react'
 import UserContext from "../context/UserContext"
+
+
 
 export default function ChoiseDetails() {
 
-    const [options, setOptions] = useState({
-        "id": 1,
-        "name": "Driven Plus",
-        "image": "https://svgshare.com/i/dSP.svg",
-        "price": "39.99",
-        "perks": [
-            {
-                "id": 1,
-                "membershipId": 1,
-                "title": "Solicitar brindes",
-                "link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            },
-            {
-                "id": 2,
-                "membershipId": 1,
-                "title": "Materiais bônus de web",
-                "link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            },
-            {
-                "id": 2,
-                "membershipId": 1,
-                "title": "Materiais bônus de web",
-                "link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            },
-            {
-                "id": 2,
-                "membershipId": 1,
-                "title": "Materiais bônus de web",
-                "link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            }
-        ]
-    })
-    const {userData, setUserData} = useContext(UserContext)
+    const {token, userData, setUserData} = useContext(UserContext)
+    const { ID_PLANO } = useParams()
+    const [option, setOption] = useState('')
     const [nameCard, setNameCard] = useState('')
     const [cardNumber, setCardNumber] = useState('')
     const [cvc, setCvc] = useState('')
     const [valityCard, setValityCard] = useState('')
-    const [visibilityPopup, setVisibilityPopup] = useState('inherit')
-    const { ID_PLANO } = useParams()
+    const [visibilityPopup, setVisibilityPopup] = useState('hidden')
     const navigate = useNavigate()
+
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+
+    useEffect(() => {
+        const promisse = axios.get(`https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions/memberships/${ID_PLANO}`, config)
+
+        promisse.then((response) => setOption(response.data))
+    }, [])
 
     function goBack() {
         navigate(-1)
@@ -55,22 +39,48 @@ export default function ChoiseDetails() {
         setVisibilityPopup('inherit')
     }
 
-    function sendData() {
-        setUserData(options)
+    function success(response){
+
+        const newUserData = {...userData, membership: option}
+        setUserData(newUserData)
+        navigate('/home')
     }
+
+    function err (){
+        window.alert("Ops! Confira se os dados do seu cartão estão corretos e tente novamente.")
+    }
+
+    function sendData() {
+
+        const data = {
+            membershipId: option.perks[1].membershipId,
+            cardName: nameCard,
+            cardNumber,
+            securityNumber: cvc,
+            expirationDate: valityCard
+        }
+
+        const promisse = axios.post('https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions', data ,config)
+
+        promisse.then((response) => success(response.data))
+        promisse.catch(err) 
+    }
+
+
 
     return (
         <Container>
-
+            {option !== '' ? 
+            <>
             <ion-icon onClick={goBack} name="arrow-back-outline"></ion-icon>
-            <img src={options.image} alt={options.name} />
-            <h1>{options.name}</h1>
+            <img src={option.image} alt={option.name} />
+            <h1>{option.name}</h1>
             <Perks>
                 <div>
                     <ion-icon name="reader-outline"></ion-icon>
                     <span>Benefícios:</span>
                 </div>
-                {options.perks.map((option, index) =>
+                {option.perks.map((option, index) =>
                     <p key={index}>{index + 1}. {option.title}</p>
                 )}
             </Perks>
@@ -79,13 +89,13 @@ export default function ChoiseDetails() {
                     <ion-icon name="cash-outline"></ion-icon>
                     <span>Preço:</span>
                 </div>
-                <p>R$ {options.price} cobrados mensalmente</p>
+                <p>R$ {option.price} cobrados mensalmente</p>
             </Price>
             <form onSubmit={onSubmit}>
                 <input type='text' required onChange={(e) => setNameCard(e.target.value)} value={nameCard} placeholder='Nome impresso no cartão' />
-                <input type='number' required onChange={(e) => setCardNumber(e.target.value)} value={cardNumber} maxlength='16' placeholder='Digitos do cartão' />
-                <input type='number' required onChange={(e) => setCvc(e.target.value)} value={cvc} maxlength='3' placeholder='Código de segurança' />
-                <input type='text' required onChange={(e) => setValityCard(e.target.value)} value={valityCard} maxlength='5' placeholder='Validade (MM/YY)' />
+                <input type='text' required onChange={(e) => setCardNumber(e.target.value)} value={cardNumber} maxLength='16' placeholder='Digitos do cartão' />
+                <input type='text' required onChange={(e) => setCvc(e.target.value)} value={cvc} maxLength='3' placeholder='Código de segurança' />
+                <input type='text' required onChange={(e) => setValityCard(e.target.value)} value={valityCard} maxLength='5' placeholder='Validade (MM/YY)' />
                 <button type='submit'>Assinar</button>
             </form>
             <PopUpWrapper visibilityPopup={visibilityPopup}>
@@ -97,7 +107,8 @@ export default function ChoiseDetails() {
                         <button onClick={sendData}>SIM</button>
                     </div>
                 </PopUp>
-            </PopUpWrapper>
+            </PopUpWrapper> 
+            </> : <h1>Carregando...</h1> }
         </Container>
     )
 }

@@ -1,26 +1,46 @@
 import styled from 'styled-components'
-import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useContext } from 'react'
 import UserContext from '../context/UserContext'
+
 
 
 export default function HomeScreen (){
 
-    const {userData} = useContext(UserContext)
-    console.log(userData)    
+    const {token, userData} = useContext(UserContext)
+    const navigate = useNavigate()
+
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+
+    const success = () => navigate("/subscriptions")
+
+    const err = () => window.alert("Ops! Houve um erro ao deletar. Que tal tentar novamente?")
+    
+    function deleteSub (){
+        const promisse = axios.delete("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions", config)
+
+        promisse.then(success)
+        promisse.catch(err)
+    }
 
     return(
         <Container>
-            <ion-icon name="person-circle"></ion-icon>
+            <ion-icon onClick={() => console.log(userData)} name="person-circle"></ion-icon>
             <img src={userData.membership.image}/>
             <h1> Olá, {userData.name}</h1>
-            {userData.membership.perks.map((perk => 
-                <button>
+            {userData.membership.perks.map((perk, index) => 
+                <button key={index}>
                     <a href={perk.link}>{perk.title}</a>
                 </button>
-                ))}
+                )}
             <div>
-            <button>Mudar plano</button>
-            <button>Cancelar plano</button>
+            <button onClick={() => navigate('/subscriptions')}>Mudar plano</button>
+            <button onClick={deleteSub}>Cancelar plano</button>
             </div>
         </Container>
     )
@@ -31,6 +51,9 @@ const Container = styled.div`
     box-sizing: border-box;
     padding: 40px 40px 0px 40px;
     color: #FFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     ion-icon{
         font-size: 34px;
@@ -42,6 +65,8 @@ const Container = styled.div`
     img{
         width: 75px;
         height: 50px;
+        position: fixed;
+        top: 20px; left: 20px;
     }
 
 
@@ -50,6 +75,7 @@ const Container = styled.div`
         text-align: center;
         font-weight: 700;
         font-size: 24px;
+        margin-top: 50px;
         margin-bottom: 20px;
     }
 

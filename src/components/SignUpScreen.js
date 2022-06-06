@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
+import axios from 'axios'
 import { useState } from "react"
 
 export default function SignUpScreen() {
@@ -9,6 +10,14 @@ export default function SignUpScreen() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate =  useNavigate()
+
+    function success (){
+        navigate('/')
+    }
+
+    function err(){
+        window.alert("Ops! Confira se os dados estão corretos e tente novamente")
+    }
 
     function onSubmit (e){
         e.preventDefault()
@@ -20,8 +29,11 @@ export default function SignUpScreen() {
             password
         }
 
-        console.log(data)
-        navigate('/')
+        const promisse = axios.post("https://mock-api.driven.com.br/api/v4/driven-plus/auth/sign-up", data)
+        promisse.then(success)
+        promisse.catch(err)
+
+        
     }
 
     return(

@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 import {Link, useNavigate} from "react-router-dom"
+import axios from 'axios'
 import { useState, useContext } from 'react'
 import logoImg from "../assets/Driven_white 1.png"
 import UserContext from '../context/UserContext'
+
 
 export default function LoginScreen() {
 
@@ -10,7 +12,43 @@ export default function LoginScreen() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
+    const userDataString = localStorage.getItem("userCredentials");
 
+    function validateUser () {
+        const  credentials = JSON.parse(userDataString);
+
+        if(credentials !== null){
+            const data = {
+                email: credentials.email,
+                password: credentials.password
+            }
+
+            const promisse = axios.post('https://mock-api.driven.com.br/api/v4/driven-plus/auth/login', data)
+            promisse.then((response) => success(response.data , data))
+            promisse.catch(err)
+        }
+    }
+
+    function success(response , data){
+
+        const credentials = JSON.stringify(data)
+        localStorage.setItem("userCredentials", credentials)
+        setToken(response.token)
+        setUserData(response)
+        if(response.membership === null){
+
+            navigate('/subscriptions')
+
+        } else {
+
+            navigate('/home')
+
+        }
+    }
+
+    function err (){
+        window.alert("Ops! Confira se os dados estão corretos e tente novamente")
+    }
 
     function onSubmit (e){
         e.preventDefault()
@@ -20,11 +58,13 @@ export default function LoginScreen() {
             password
         }
 
-        console.log(data)
+        const promisse = axios.post("https://mock-api.driven.com.br/api/v4/driven-plus/auth/login", data)
+            promisse.then((response) => success(response.data, data))
+            promisse.catch(err)
 
-        navigate('/subscriptions')
-        setUserData("resposta da api"  )
     }
+
+    validateUser()
 
     return (
         <Container>

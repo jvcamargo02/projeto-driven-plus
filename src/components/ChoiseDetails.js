@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 import styled from 'styled-components'
-import { useState, useRef } from 'react'
+import { useState, useContext } from 'react'
+import UserContext from "../context/UserContext"
 
 export default function ChoiseDetails() {
 
@@ -36,7 +37,7 @@ export default function ChoiseDetails() {
             }
         ]
     })
-
+    const {userData, setUserData} = useContext(UserContext)
     const [nameCard, setNameCard] = useState('')
     const [cardNumber, setCardNumber] = useState('')
     const [cvc, setCvc] = useState('')
@@ -55,7 +56,7 @@ export default function ChoiseDetails() {
     }
 
     function sendData() {
-
+        setUserData(options)
     }
 
     return (
@@ -145,6 +146,7 @@ const Container = styled.div`
             border-radius: 5px;
             font-size: 17px;
             font-weight: 700;
+            cursor: pointer;
         }
     }
 
@@ -248,6 +250,7 @@ const PopUp = styled.div`
             font-size: 14px;
             font-weight: 700;
             margin-right: 5px;
+            cursor: pointer;
         }
 
         button:nth-child(2){

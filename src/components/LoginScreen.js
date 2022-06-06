@@ -6,7 +6,7 @@ import UserContext from '../context/UserContext'
 
 export default function LoginScreen() {
 
-    const {token, setToken} = useContext(UserContext)
+    const {setToken, setUserData} = useContext(UserContext)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
@@ -23,6 +23,7 @@ export default function LoginScreen() {
         console.log(data)
 
         navigate('/subscriptions')
+        setUserData("resposta da api"  )
     }
 
     return (

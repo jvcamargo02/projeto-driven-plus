@@ -51,6 +51,7 @@ table {
 }
 :root{
 	--button-color: #FF4791;
+	--red-button-color: #ff4747;
 }
 `
 

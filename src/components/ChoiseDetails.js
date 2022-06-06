@@ -100,7 +100,7 @@ export default function ChoiseDetails() {
                 <PopUp>
                     <ion-icon onClick={() => setVisibilityPopup("hidden")} name="close-circle"></ion-icon>
                     <div>
-                        <h3>Tem certeza que deseja assinar o plano Driven Plus (R$39,99)?</h3>
+                        <h3>Tem certeza que deseja assinar o plano {option.name} (R${option.price})?</h3>
                         <button onClick={() => setVisibilityPopup("hidden")}>Não</button>
                         <button onClick={sendData}>SIM</button>
                     </div>

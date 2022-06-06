@@ -8,6 +8,7 @@ import SubscriptionScreen from './SubscriptionScreen'
 import ChoiseDetails from './ChoiseDetails'
 import HomeScreen from './HomeScreen'
 import UserScreen from './UserScreen'
+import UpdateUserData from './UpdateUserData'
 
 export default function App() {
 
@@ -26,6 +27,7 @@ export default function App() {
                         <Route path='/subscriptions/:ID_PLANO' element={<ChoiseDetails />} />
                         <Route path='/home' element={<HomeScreen />} />
                         <Route path='/users/:USER_ID' element={<UserScreen />} />
+                        <Route path='/users/:USER_ID/update' element={<UpdateUserData />} />
                     </Routes>
                 </UserContext.Provider>
             </BrowserRouter>

@@ -17,6 +17,8 @@ export default function HomeScreen (){
         }
     }
 
+    console.log(userData)
+
     const success = () => navigate("/subscriptions")
 
     const err = () => window.alert("Ops! Houve um erro ao deletar. Que tal tentar novamente?")

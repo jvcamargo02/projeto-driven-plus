@@ -8,9 +8,8 @@ export default function UserScreen (){
 
     const { userData } = useContext(UserContext)
     const navigate = useNavigate()
-    const goBack = () => navigate(-1)
+    const goBack = () => navigate('/home')
  
-    console.log(userData)
 
     return(
         <Container>
@@ -18,7 +17,7 @@ export default function UserScreen (){
             <input disabled value={userData.name}/>
             <input disabled value={userData.cpf}/>
             <input disabled value={userData.email}/>
-            <button>Atualizar</button>
+            <button onClick={() => navigate(`/users/${userData.id}/update`)}>Atualizar</button>
         </Container>
     )
 }

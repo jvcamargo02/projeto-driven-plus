@@ -27,6 +27,13 @@ export default function UpdateUserData (){
 
     function success (response){
 
+        const updateLocalStorage = {
+            email: response.email,
+            password: response.password
+        }
+        
+        localStorage.setItem("userCredentials", JSON.stringify(updateLocalStorage))
+
         const newUserData = {...userData, id: response.id, name: response.name, cpf: response.cpf, email: response.email, password: response.password }
         setUserData(newUserData)
         navigate(`/users/${response.id}`)
